@@ -28,7 +28,7 @@
                                 <td>{{ $product['quantity'] }}</td>
                                 <td>
                                     <a  class="btn btn-primary" href="{{ route('product.show', ['id' => $product['id']]) }}" role="button">Ver</a>
-                                    <a  class="btn btn-primary" onClick="makeReservation($(this));" href="#" data-id="{{ $product['id'] }}" data-price ="{{ $product['price'] }}" role="button">Agregar al Carrito</a>
+                                    <a  class="btn btn-primary" onClick="addProductToCart($(this));" href="#" data-id="{{ $product['id'] }}" data-price ="{{ $product['price'] }}" role="button">Agregar al Carrito</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -40,64 +40,26 @@
 
 </x-app-layout>
 <script type="text/javascript">
-
-    $(document).ready(function () {
+$(document).ready(function () {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-
-        $('#activity_at').datepicker({
-            uiLibrary: 'bootstrap4',
-            format: 'dd/mm/yyyy',
-            minDate: today,
-        });
-
-        $('#search').click(function(){
-            var url = "{{ route('product.list') }}";
-            var customer_count = $('#customer_count').val();
-            var activity_at = $('#activity_at').val();
-            var parts = activity_at.split('/');
-            activity_at = parts[2] +'-'+ parts[1] +'-'+ parts[0];
-
-            $.ajax({
-            type: "get",
-            url: url,
-            data: "activity_at="+ activity_at + "&customer_count=" + customer_count,
-            success: function(data)
-            {
-                debugger;
-                $('#data').html(data);
-            },
-            error:function(error){
-                debugger;
-                alert(error.responseJSON.message);
-            }
-        });
-
-    });
-
 });
-function makeReservation(link) {
+function addProductToCart(link) {
         debugger;
-            let url = "{{ route('product.list') }}";
-            let customer_count = $('#customer_count').val();
-            let activity_at = $('#activity_at').val();
-            let parts = activity_at.split('/');
-            activity_at = parts[2] +'-'+ parts[1] +'-'+ parts[0];
-            let activity_id = link.data('id');
+            let url = "{{ route('cart.store') }}";
+            let product_id = link.data('id');
             let price = link.data('price');
-
+            let quantity = 1;
             $.ajax({
             type: "post",
             url: url,
             data:{
-                    "activity_at" : activity_at,
-                    "customer_count" : customer_count,
-                    "activity_id" : activity_id,
-                    "price": price
+                    "product_id" : product_id,
+                    "price": price,
+                    "quantity" : quantity,
                 },
             success: function(data)
             {

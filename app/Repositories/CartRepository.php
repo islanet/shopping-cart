@@ -11,4 +11,9 @@ class CartRepository extends BaseRepository
         return New Cart();
     }
 
+    public function findByUserId($userId)
+    {
+        return Cart::where('user_id',$userId)->where('active',1)->first();
+    }
+
 }

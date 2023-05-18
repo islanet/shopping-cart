@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class CartItem extends Model
 {
     use HasFactory;
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'cart_id',
+        'product_id',
+        'price',
+        'quantity'
+    ];
 
     public function cart()
     {

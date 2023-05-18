@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,10 @@ Route::middleware('auth')->group(function () {
     // products
     Route::get('/products', [ProductController::class, 'list'])->name('product.list');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('product.show');
+
+    //carts
+    Route::post('/carts', [CartController::class, 'store'])->name('cart.store');
+
 
 });
 

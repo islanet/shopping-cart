@@ -6,7 +6,7 @@ namespace App\Repositories;
 abstract class BaseRepository
 {
     abstract public function getModel();
-    public function find($id, $with)
+    public function find($id, $with = [])
     {
         return $this->getModel()->where('id',$id)->with($with)->first();
     }
