@@ -9,6 +9,9 @@ use App\Http\Requests\Cart\StoreRequest;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Mail\AddProductToCartNotification;
+use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 use Carbon\Carbon;
 
@@ -56,6 +59,18 @@ class CartService
         }
         $product->quantity--;
         $product->save();
+        //send email to user
+        $data = [
+            "email" => env('MAIL_FROM_ADDRESS')
+        ];
+
+        $data['cart_id'] =  $cart->id;
+        $data['user_name'] =  $request->user()->name .' (' . $request->user()->email . ')' ;
+        $data['cart_item_id'] =  $cartItem->id;
+        $data['cart_item_product_name'] =  $cartItem->product->name;
+        $data['cart_item_quantity'] =  $cartItem->quantity;
+        $data['cart_item_price'] =  $cartItem->price;
+        Mail::to($request->user()->email)->send(new AddProductToCartNotification($data));
 
         return $cart;
     }

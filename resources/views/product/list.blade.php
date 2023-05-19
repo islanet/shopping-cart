@@ -48,7 +48,7 @@ $(document).ready(function () {
         });
 });
 function addProductToCart(link) {
-        debugger;
+
             let url = "{{ route('cart.store') }}";
             let product_id = link.data('id');
             let price = link.data('price');
@@ -63,11 +63,9 @@ function addProductToCart(link) {
                 },
             success: function(data)
             {
-                debugger;
                 window.location = data.url;
             },
             error:function(error){
-                debugger;
                 alert(error.responseJSON.message);
             }
         });
